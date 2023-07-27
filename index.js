@@ -4,6 +4,9 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/users.js";
 import authRoutes from "./routes/auth.js";
 import roleRoutes from "./routes/role.js";
+import categoriesRoutes from "./routes/categories.js";
+import productsRoutes from "./routes/product.js";
+import customersRoutes from "./routes/customer.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -26,6 +29,9 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/auths", authRoutes);
 app.use("/api/roles", roleRoutes);
+app.use("/api/categories", categoriesRoutes);
+app.use("/api/products", productsRoutes);
+app.use("/api/customers", customersRoutes);
 app.use((err, req, res, next) => {
   const status = err.status || 500;
   const message = err.message || "Something went wrong";

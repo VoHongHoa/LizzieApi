@@ -47,7 +47,7 @@ export const signin = async (req, res, next) => {
       httpOnly: true,
     })
     .status(200)
-    .json({ success: true, user: others });
+    .json({ success: true, user: others, access_token: token });
   try {
   } catch (e) {
     //console.log(e);

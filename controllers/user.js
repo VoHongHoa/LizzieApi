@@ -78,9 +78,7 @@ export const search = async (req, res, next) => {
       };
     }
     if (!!searchModel.userCode) {
-      query.userCode = {
-        $regex: new RegExp(searchModel.userCode, "i"),
-      };
+      query.userCode = searchModel.userCode;
     }
     if (!!searchModel.displayName) {
       query.displayName = {
@@ -113,6 +111,11 @@ export const search = async (req, res, next) => {
       };
     }
     const users = await User.find(query)
+      .populate([
+        { path: "CreateUserObject", select: "userName" },
+        { path: "UpdateUserObject", select: "userName" },
+        { path: "RoleObject", select: "roleName" },
+      ])
       .limit(searchOption.limit)
       .skip((searchOption.page - 1) * searchOption.limit);
     const total = await User.find(query).count();

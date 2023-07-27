@@ -1,10 +1,14 @@
 import mongoose from "mongoose";
 
-const UserSchema = new mongoose.Schema(
+const CustomersSchema = new mongoose.Schema(
   {
-    userName: {
+    customerName: {
       type: String,
       required: true,
+    },
+    customerCode: {
+      type: String,
+      require: true,
     },
     displayName: {
       type: String,
@@ -18,10 +22,6 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    userCode: {
-      type: String,
-      require: true,
-    },
     password: {
       type: String,
       require: true,
@@ -34,16 +34,11 @@ const UserSchema = new mongoose.Schema(
       type: String,
       require: false,
     },
-    role: {
-      type: String,
-      ref: "Role",
-      require: true,
-    },
     img: {
       type: String,
     },
-    fromGoogle: {
-      type: Boolean,
+    customerSource: {
+      type: String,
       default: false,
     },
     createdBy: {
@@ -57,27 +52,21 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-UserSchema.virtual("RoleObject", {
-  ref: "Role",
-  localField: "role",
-  foreignField: "roleCode",
-  justOne: true,
-});
-UserSchema.virtual("CreateUserObject", {
+CustomersSchema.virtual("CreateUserObject", {
   ref: "User",
   localField: "createdBy",
   foreignField: "_id",
   justOne: true,
 });
 
-UserSchema.virtual("UpdateUserObject", {
+CustomersSchema.virtual("UpdateUserObject", {
   ref: "User",
   localField: "updatedBy",
   foreignField: "_id",
   justOne: true,
 });
 
-UserSchema.set("toObject", { virtuals: true });
-UserSchema.set("toJSON", { virtuals: true });
+CustomersSchema.set("toObject", { virtuals: true });
+CustomersSchema.set("toJSON", { virtuals: true });
 
-export default mongoose.model("User", UserSchema);
+export default mongoose.model("Customers", CustomersSchema);
