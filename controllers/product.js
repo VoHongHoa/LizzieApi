@@ -95,13 +95,19 @@ export const searchAction = async (req, res, next) => {
       query.category = searchModel.category;
     }
     if (!!searchModel.color) {
-      query.color = searchModel.color;
+      query.color = {
+        $regex: new RegExp(searchModel.color, "i"),
+      };
     }
     if (!!searchModel.price) {
-      query.price = searchModel.price;
+      query.price = {
+        $regex: new RegExp(searchModel.price, "i"),
+      };
     }
     if (!!searchModel.size) {
-      query.size = searchModel.size;
+      query.size = {
+        $regex: new RegExp(searchModel.size, "i"),
+      };
     }
     if (!!searchModel.status) {
       query.status = searchModel.status;
