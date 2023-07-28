@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import User from "../models/User.js";
+import Customer from "../models/Customer.js";
 import bcrypt from "bcryptjs";
 import { createError } from "../error.js";
 import jwt from "jsonwebtoken";
@@ -81,5 +82,55 @@ export const googleAuth = async (req, res, next) => {
     }
   } catch (e) {
     next(err);
+  }
+};
+
+export const signUpCustomer = async (req, res) => {
+  try {
+    const newCustomer = new Customer({ ...req.body });
+    const customerExist = await Customer.find({
+      customerCode: newCustomer.customerCode,
+    });
+    if (customerExist.length > 0) {
+      return res
+        .status(200)
+        .json({ success: false, message: "Mã người dùng đã tồn tại" });
+    }
+    await newCustomer.save();
+    res.status(200).json({ success: true, message: `Đăng ký thành công` });
+  } catch (e) {
+    console.log(e);
+    next(createError(404, "not found sorry!"));
+  }
+};
+
+export const signinCustomer = async (req, res, next) => {
+  //console.log(req.body);
+  const user = await Customer.findOne({
+    customerName: req.body.customerName,
+  }).populate([{ path: "RoleObject", select: "roleName" }]);
+  if (!user) {
+    return res.status(200).json({
+      success: false,
+      message: "Tên đăng nhập không chính xác",
+    });
+  }
+  const isCorrect = await bcrypt.compare(req.body.password, user.password);
+  if (!isCorrect) {
+    return res.status(200).json({
+      success: false,
+      message: "Mật khẩu không chính xác",
+    });
+  }
+  const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT);
+
+  const { password, ...others } = user._doc;
+  res
+    .status(200)
+    .json({ success: true, customer: others, access_token: token });
+  try {
+  } catch (e) {
+    //console.log(e);
+    next(createError(404, "not found sorry!"));
   }
 };
