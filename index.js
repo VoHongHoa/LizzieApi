@@ -7,6 +7,10 @@ import roleRoutes from "./routes/role.js";
 import categoriesRoutes from "./routes/categories.js";
 import productsRoutes from "./routes/product.js";
 import customersRoutes from "./routes/customer.js";
+import unitsRoutes from "./routes/unit.js";
+import colorsRoutes from "./routes/color.js";
+import sizesRoutes from "./routes/size.js";
+
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -32,6 +36,10 @@ app.use("/api/roles", roleRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use("/api/products", productsRoutes);
 app.use("/api/customers", customersRoutes);
+app.use("/api/units", unitsRoutes);
+app.use("/api/colors", colorsRoutes);
+app.use("/api/sizes", sizesRoutes);
+
 app.use((err, req, res, next) => {
   const status = err.status || 500;
   const message = err.message || "Something went wrong";
