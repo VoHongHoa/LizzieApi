@@ -16,6 +16,7 @@ export const createCustomer = async (req, res, next) => {
     }
     newCustomer.customerSource = "Web Admin";
     newCustomer.createdBy = new mongoose.Types.ObjectId(user._id);
+    console.log(newCustomer);
     await newCustomer.save();
     res
       .status(200)
