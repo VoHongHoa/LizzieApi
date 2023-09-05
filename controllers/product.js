@@ -2,7 +2,39 @@ import { createError } from "../error.js";
 import mongoose from "mongoose";
 import Products from "../models/Products.js";
 
-export const getProductByProductCode = async (req, res) => {
+export const getProductByCategory = async (req, res, next) => {
+  try {
+    const { category } = req.params;
+    const products = await Products.find({
+      status: "Active",
+      category,
+    }).populate([{ path: "CategoriesObject", select: "categoriesName" }]);
+    return res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (e) {
+    console.log(e);
+    next(createError(404, "not found sorry"));
+  }
+};
+
+export const getAllProduct = async (req, res, next) => {
+  try {
+    const products = await Products.find({ status: "Active" }).populate([
+      { path: "CategoriesObject", select: "categoriesName" },
+    ]);
+    return res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (e) {
+    console.log(e);
+    next(createError(404, "not found sorry"));
+  }
+};
+
+export const getProductByProductCode = async (req, res, next) => {
   try {
     const { productCode } = req.params;
     const product = await Products.findOne(productCode);

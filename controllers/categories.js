@@ -3,6 +3,19 @@ import { createError } from "../error.js";
 import Categories from "../models/Categories.js";
 import mongoose from "mongoose";
 
+export const getAllCategory = async (req, res, next) => {
+  try {
+    const categories = await Categories.find({ status: "Active" });
+    return res.status(200).json({
+      success: true,
+      categories,
+    });
+  } catch (e) {
+    console.log(e);
+    next(createError(404, "not found sorry"));
+  }
+};
+
 export const updateCategory = async (req, res, next) => {
   try {
     const { categoryCode } = req.params;

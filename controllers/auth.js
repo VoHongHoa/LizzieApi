@@ -87,7 +87,12 @@ export const googleAuth = async (req, res, next) => {
 
 export const signUpCustomer = async (req, res) => {
   try {
-    const newCustomer = new Customer({ ...req.body });
+    const newCustomer = new Customer({
+      ...req.body,
+      password: bcrypt.hashSync(req.body.password, salt),
+      displayName: req.body.customerName,
+      customerCode: req.body.customerName,
+    });
     const customerExist = await Customer.find({
       customerCode: newCustomer.customerCode,
     });
@@ -108,7 +113,7 @@ export const signinCustomer = async (req, res, next) => {
   //console.log(req.body);
   const user = await Customer.findOne({
     customerName: req.body.customerName,
-  }).populate([{ path: "RoleObject", select: "roleName" }]);
+  });
   if (!user) {
     return res.status(200).json({
       success: false,
