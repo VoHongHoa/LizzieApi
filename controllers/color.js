@@ -2,6 +2,19 @@ import { createError } from "../error.js";
 import Color from "../models/Color.js";
 import mongoose from "mongoose";
 
+export const getAllColor = async (req, res, next) => {
+  try {
+    const colors = await Color.find({ status: "Active" });
+    return res.status(200).json({
+      success: true,
+      colors,
+    });
+  } catch (e) {
+    console.log(e);
+    next(createError(404, "not found sorry"));
+  }
+};
+
 export const updateColor = async (req, res, next) => {
   try {
     const { colorCode } = req.params;

@@ -4,7 +4,6 @@ const CustomersSchema = new mongoose.Schema(
   {
     customerName: {
       type: String,
-      required: true,
     },
     customerCode: {
       type: String,
@@ -12,7 +11,6 @@ const CustomersSchema = new mongoose.Schema(
     },
     displayName: {
       type: String,
-      require: true,
     },
     telephone: {
       type: String,

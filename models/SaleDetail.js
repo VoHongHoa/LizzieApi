@@ -6,9 +6,13 @@ const SaleDetail = new mongoose.Schema(
       type: String,
       ref: "Products",
     },
-    quantity: {
+    invoiceHeaderCode: {
       type: String,
-      default: "0",
+      ref: "SaleHeader",
+    },
+    quantity: {
+      type: Number,
+      default: 0,
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
@@ -21,6 +25,20 @@ const SaleDetail = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+SaleDetail.virtual("SaleHeaderObject", {
+  ref: "SaleHeader",
+  localField: "invoiceHeaderCode",
+  foreignField: "invoiceHeaderCode",
+  justOne: true,
+});
+
+SaleDetail.virtual("ProductObject", {
+  ref: "Products",
+  localField: "productCode",
+  foreignField: "productCode",
+  justOne: true,
+});
 
 SaleDetail.virtual("CreateUserObject", {
   ref: "User",

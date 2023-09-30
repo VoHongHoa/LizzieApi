@@ -2,6 +2,19 @@ import { createError } from "../error.js";
 import Size from "../models/Size.js";
 import mongoose from "mongoose";
 
+export const getAllSize = async (req, res, next) => {
+  try {
+    const sizes = await Size.find({ status: "Active" });
+    return res.status(200).json({
+      success: true,
+      sizes,
+    });
+  } catch (e) {
+    console.log(e);
+    next(createError(404, "not found sorry"));
+  }
+};
+
 export const updateSize = async (req, res, next) => {
   try {
     const { sizeCode } = req.params;

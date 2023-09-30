@@ -2,14 +2,14 @@ import express from "express";
 import {
   deleteUsers,
   getAllUser,
-  getUser,
+  getUserÌnfor,
   search,
   updateUser,
 } from "../controllers/user.js";
 import { verifyToken } from "../verifyToken.js";
 const router = express.Router();
 //get a user
-router.get("/find/:id", getUser);
+router.get("/:id", getUserÌnfor);
 //update user
 router.put("/:id", verifyToken, updateUser);
 //getAllUser

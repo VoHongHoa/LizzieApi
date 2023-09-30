@@ -2,6 +2,28 @@ import { createError } from "../error.js";
 import mongoose from "mongoose";
 import Customer from "../models/Customer.js";
 
+export const getCustomerInfor = async (req, res, next) => {
+  try {
+    const { customerCode } = req.params;
+    const customer = await Customer.findOne({ customerCode }).select(
+      "-password"
+    );
+    if (!customer) {
+      return res.status(200).json({
+        success: false,
+        message: "Khong tim thay customer",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      customer,
+    });
+  } catch (e) {
+    console.log(e);
+    next(createError(404, "not found sorry!"));
+  }
+};
+
 export const createCustomer = async (req, res, next) => {
   try {
     const user = req.user;

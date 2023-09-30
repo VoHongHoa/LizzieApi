@@ -1,6 +1,56 @@
 import { createError } from "../error.js";
 import mongoose from "mongoose";
 import Products from "../models/Products.js";
+import SaleDetail from "../models/SaleDetail.js";
+
+export const getProductBestSaller = async (req, res, next) => {
+  try {
+    const { category } = req.query;
+    const query = {};
+    if (!!category) {
+      query.category = category;
+    }
+    const products = await SaleDetail.aggregate([
+      {
+        $group: {
+          _id: "$productCode",
+          sumOfQuantity: {
+            $sum: "$quantity",
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "productCode",
+          as: "productObject",
+        },
+      },
+      { $unwind: "$productObject" },
+      {
+        $project: {
+          sumOfQuantity: 1,
+          category: "$productObject.category",
+          productName: "$productObject.productName",
+          productCode: "$productObject.productCode",
+          price: "$productObject.price",
+          productImage: "$productObject.productImage",
+        },
+      },
+      {
+        $match: { $and: [query] },
+      },
+    ]);
+    return res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (e) {
+    console.log(e);
+    next(createError(404, "not found sorry"));
+  }
+};
 
 export const getProductByCategory = async (req, res, next) => {
   try {
@@ -37,7 +87,9 @@ export const getAllProduct = async (req, res, next) => {
 export const getProductByProductCode = async (req, res, next) => {
   try {
     const { productCode } = req.params;
-    const product = await Products.findOne(productCode);
+    const product = await Products.findOne({ productCode }).populate([
+      { path: "CategoriesObject", select: "categoriesName" },
+    ]);
     if (!product) {
       return res.status(200).json({
         success: false,
@@ -49,6 +101,7 @@ export const getProductByProductCode = async (req, res, next) => {
       product,
     });
   } catch (e) {
+    console.log(e);
     next(createError(404, "not found sorry"));
   }
 };

@@ -5,28 +5,44 @@ const SaleHeader = new mongoose.Schema(
     customerCode: {
       type: String,
       ref: "Customers",
+      require: false,
     },
-    priceCost: {
+    invoiceHeaderCode: {
+      type: String,
+    },
+    invoiceValue: {
+      type: String,
+    },
+    invoiceEmail: {
+      type: String,
+    },
+    invoicePaymentStatus: {
+      type: String,
+    },
+    invoiceShipStatus: {
+      type: String,
+    },
+    invoiceShipAddress: {
+      type: String,
+    },
+    invoiceReceivedPhone: {
+      type: String,
+    },
+    invoiceBoughtName: {
+      type: String,
+    },
+    invoiceReceiveName: {
+      type: String,
+    },
+    invoiceQuantity: {
+      type: String,
+      default: "0",
+    },
+    invoiceNote: {
       type: String,
     },
     promotionCode: {
       type: [],
-    },
-    billStatus: {
-      type: String,
-    },
-    shipStatus: {
-      type: String,
-    },
-    shipAddress: {
-      type: String,
-    },
-    receivedPhone: {
-      type: String,
-    },
-    quantity: {
-      type: String,
-      default: "0",
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,

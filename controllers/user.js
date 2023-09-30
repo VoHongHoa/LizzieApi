@@ -21,7 +21,7 @@ export const updateUser = async (req, res, next) => {
     return next(createError(403, "You can update only your account"));
   }
 };
-export const getUser = async (req, res, next) => {
+export const getUserÌnfor = async (req, res, next) => {
   try {
     let user = await User.findById(req.params.id);
     res.status(200).json(user);

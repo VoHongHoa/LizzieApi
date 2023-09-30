@@ -90,8 +90,7 @@ export const signUpCustomer = async (req, res) => {
     const newCustomer = new Customer({
       ...req.body,
       password: bcrypt.hashSync(req.body.password, salt),
-      displayName: req.body.customerName,
-      customerCode: req.body.customerName,
+      customerCode: req.body.customerCode,
     });
     const customerExist = await Customer.find({
       customerCode: newCustomer.customerCode,
@@ -112,7 +111,7 @@ export const signUpCustomer = async (req, res) => {
 export const signinCustomer = async (req, res, next) => {
   //console.log(req.body);
   const user = await Customer.findOne({
-    customerName: req.body.customerName,
+    customerCode: req.body.customerCode,
   });
   if (!user) {
     return res.status(200).json({
@@ -127,7 +126,10 @@ export const signinCustomer = async (req, res, next) => {
       message: "Mật khẩu không chính xác",
     });
   }
-  const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT);
+  const token = jwt.sign(
+    { _id: user._id, customerCode: user.customerCode },
+    process.env.JWT
+  );
 
   const { password, ...others } = user._doc;
   res
