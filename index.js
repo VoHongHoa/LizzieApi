@@ -11,6 +11,10 @@ import unitsRoutes from "./routes/unit.js";
 import colorsRoutes from "./routes/color.js";
 import sizesRoutes from "./routes/size.js";
 import salesRoutes from "./routes/sale.js";
+import reviewsRoutes from "./routes/reviews.js";
+import ratingRoutes from "./routes/rating.js";
+import whiteListRoutes from "./routes/whiteList.js";
+
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { logger, logEvents } from "./middleware/logger.js";
@@ -49,6 +53,9 @@ app.use("/api/units", unitsRoutes);
 app.use("/api/colors", colorsRoutes);
 app.use("/api/sizes", sizesRoutes);
 app.use("/api/invoice", salesRoutes);
+app.use("/api/rating", ratingRoutes);
+app.use("/api/reviews", reviewsRoutes);
+app.use("/api/whitelist", whiteListRoutes);
 
 app.all("*", (req, res) => {
   res.status(404);
